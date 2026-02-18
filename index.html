@@ -25,6 +25,13 @@
                     
                     <label for="access-token">Access Token:</label>
                     <input type="password" id="access-token" placeholder="Your Canvas API token">
+
+                    <details class="advanced-config">
+                        <summary>Advanced Settings</summary>
+                        <label for="cors-proxy">CORS Proxy URL:</label>
+                        <input type="text" id="cors-proxy" placeholder="https://corsproxy.io/?">
+                        <p class="help-text">Required for browser access. Default: corsproxy.io</p>
+                    </details>
                     
                     <button id="save-config-btn">Save Configuration</button>
                 </div>

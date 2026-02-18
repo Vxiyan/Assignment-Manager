@@ -1,7 +1,10 @@
 // Canvas API Configuration
 let canvasConfig = {
     domain: localStorage.getItem('canvasDomain') || '',
-    token: localStorage.getItem('canvasToken') || ''
+    token: localStorage.getItem('canvasToken') || '',
+    // CORS proxy is needed because Canvas API doesn't allow browser requests from different origins.
+    // You can use a public proxy or host your own. Set to empty string to disable.
+    corsProxy: localStorage.getItem('corsProxy') || 'https://corsproxy.io/?'
 };
 
 // DOM Elements
@@ -12,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Cache DOM elements
     elements.canvasDomain = document.getElementById('canvas-domain');
     elements.accessToken = document.getElementById('access-token');
+    elements.corsProxy = document.getElementById('cors-proxy');
     elements.saveConfigBtn = document.getElementById('save-config-btn');
     elements.loadCoursesBtn = document.getElementById('load-courses-btn');
     elements.coursesContainer = document.getElementById('courses-container');
@@ -26,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Load saved config into inputs
     elements.canvasDomain.value = canvasConfig.domain;
     elements.accessToken.value = canvasConfig.token;
+    elements.corsProxy.value = canvasConfig.corsProxy;
 
     // Event listeners
     elements.saveConfigBtn.addEventListener('click', saveConfiguration);
@@ -37,33 +42,44 @@ document.addEventListener('DOMContentLoaded', () => {
 function saveConfiguration() {
     canvasConfig.domain = elements.canvasDomain.value.trim();
     canvasConfig.token = elements.accessToken.value.trim();
+    canvasConfig.corsProxy = elements.corsProxy.value.trim();
 
     // Remove protocol if user included it
     canvasConfig.domain = canvasConfig.domain.replace(/^https?:\/\//, '');
 
     localStorage.setItem('canvasDomain', canvasConfig.domain);
     localStorage.setItem('canvasToken', canvasConfig.token);
+    localStorage.setItem('corsProxy', canvasConfig.corsProxy);
 
     showMessage('Configuration saved!', 'success');
 }
 
-// Make authenticated API request to Canvas
+// Make authenticated API request to Canvas (via CORS proxy)
 async function canvasApiRequest(endpoint) {
     if (!canvasConfig.domain || !canvasConfig.token) {
         throw new Error('Please configure your Canvas domain and access token first.');
     }
 
-    const url = `https://${canvasConfig.domain}/api/v1${endpoint}`;
+    const canvasUrl = `https://${canvasConfig.domain}/api/v1${endpoint}`;
+    
+    // Use CORS proxy if configured
+    const url = canvasConfig.corsProxy 
+        ? `${canvasConfig.corsProxy}${encodeURIComponent(canvasUrl)}`
+        : canvasUrl;
     
     const response = await fetch(url, {
         headers: {
-            'Authorization': `Bearer ${canvasConfig.token}`
+            'Authorization': `Bearer ${canvasConfig.token}`,
+            'x-requested-with': 'XMLHttpRequest'  // Some proxies require this
         }
     });
 
     if (!response.ok) {
         if (response.status === 401) {
             throw new Error('Invalid access token. Please check your token and try again.');
+        }
+        if (response.status === 403) {
+            throw new Error('Access forbidden. The CORS proxy may be blocking the request, or your token lacks permissions.');
         }
         throw new Error(`API request failed: ${response.status} ${response.statusText}`);
     }

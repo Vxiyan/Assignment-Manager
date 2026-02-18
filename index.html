@@ -1,28 +1,70 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <style src="style.css">
-            @font-face {
-    font-family: 'Jetbrains'; /* Choose a descriptive name for your font */
-    src: url('JetbrainsMono-Regular.ttf') format('truetype');
-    font-weight: normal; /* Define font-weight if applicable (e.g., bold, light) */
-    font-style: normal;  /* Define font-style if applicable (e.g., italic) */
-    font-display: swap;  /* Optional: Controls how font is displayed while loading */
-        }
-        </style>
-        <script src="script.js"></script>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css">
+        <script src="script.js" defer></script>
         <title>Assignment Manager</title>
-        <link rel="icon "type="image/x-icon" href="favicon.ico"></link>
+        <link rel="icon" type="image/x-icon" href="favicon.ico">
     </head>
     <body>
         <header>
-            <h2 style="font-family: Jetbrains Mono;" >Assignment Manager</h2>
-            <p style="font-family: Jetbrains Mono;">Manage your canvas assignments and see the due date, rubric, how many points its worth, it's name, and instructions!</p>
+            <h2>Assignment Manager</h2>
+            <p>Manage your Canvas assignments and see the due date, rubric, how many points it's worth, its name, and instructions!</p>
         </header>
-        <button id="load-courses-but">Load My Courses</button>
+
+        <main>
+            <!-- Configuration Section -->
+            <section id="config-section">
+                <h3>Canvas API Configuration</h3>
+                <p class="help-text">To get your access token: Canvas → Account → Settings → New Access Token</p>
+                <div class="config-form">
+                    <label for="canvas-domain">Canvas Domain:</label>
+                    <input type="text" id="canvas-domain" placeholder="e.g., school.instructure.com">
+                    
+                    <label for="access-token">Access Token:</label>
+                    <input type="password" id="access-token" placeholder="Your Canvas API token">
+                    
+                    <button id="save-config-btn">Save Configuration</button>
+                </div>
+            </section>
+
+            <!-- Courses Section -->
+            <section id="courses-section">
+                <h3>Your Courses</h3>
+                <button id="load-courses-btn">Load My Courses</button>
+                <div id="courses-container"></div>
+            </section>
+
+            <!-- Assignments Table -->
+            <section id="assignments-section" style="display: none;">
+                <h3>Assignments for: <span id="selected-course-name"></span></h3>
+                <button id="back-to-courses-btn">← Back to Courses</button>
+                <div id="assignments-container">
+                    <table id="assignments-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Due Date</th>
+                                <th>Points</th>
+                                <th>Rubric</th>
+                                <th>Instructions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="assignments-body"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Loading/Error States -->
+            <div id="loading" class="hidden">Loading...</div>
+            <div id="error" class="hidden"></div>
+        </main>
+
         <footer>
-            <a style="font-family: Jetbrains Mono;" href="https://www.flaticon.com/free-icons/article" title="article icons">Article icons created by manshagraphics - Flaticon</a>
-            <a style="font-family: Jetbrains Mono;" href="https://www.jetbrains.com/lp/mono/" title="jetbrains">Jetbrains Mono is being used as the font for this website.</a>
+            <a href="https://www.flaticon.com/free-icons/article" title="article icons">Article icons created by manshagraphics - Flaticon</a>
+            <a href="https://www.jetbrains.com/lp/mono/" title="jetbrains">JetBrains Mono is being used as the font for this website.</a>
         </footer>
     </body>
 </html>

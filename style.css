@@ -1,11 +1,266 @@
 @font-face {
-    font-family: 'Jetbrains'; /* Choose a descriptive name for your font */
-    src: url('JetbrainsMono-Regular.ttf') format('truetype');
-    font-weight: normal; /* Define font-weight if applicable (e.g., bold, light) */
-    font-style: normal;  /* Define font-style if applicable (e.g., italic) */
-    font-display: swap;  /* Optional: Controls how font is displayed while loading */
+    font-family: 'JetBrains Mono';
+    src: url('JetBrainsMono-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
 }
-body{
+
+* {
+    box-sizing: border-box;
+}
+
+body {
     background-color: antiquewhite;
-    font-family: Jetbrains Mono;
+    font-family: 'JetBrains Mono', monospace;
+    margin: 0;
+    padding: 20px;
+    line-height: 1.6;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+header h2 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+header p {
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+section {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+section h3 {
+    margin-top: 0;
+    color: #333;
+    border-bottom: 2px solid #e74c3c;
+    padding-bottom: 10px;
+}
+
+/* Configuration Form */
+.config-form {
+    display: grid;
+    gap: 15px;
+    max-width: 500px;
+}
+
+.config-form label {
+    font-weight: bold;
+    color: #555;
+}
+
+.config-form input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.config-form input:focus {
+    outline: none;
+    border-color: #e74c3c;
+}
+
+.help-text {
+    color: #888;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+/* Buttons */
+button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #c0392b;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+#back-to-courses-btn {
+    background-color: #666;
+    margin-bottom: 20px;
+}
+
+#back-to-courses-btn:hover {
+    background-color: #555;
+}
+
+/* Course Cards */
+#courses-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.course-card {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.course-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    border-color: #e74c3c;
+}
+
+.course-card h4 {
+    margin: 0 0 10px 0;
+    color: #333;
+}
+
+.course-card p {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+}
+
+/* Assignments Table */
+#assignments-container {
+    overflow-x: auto;
+}
+
+#assignments-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+#assignments-table th,
+#assignments-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+#assignments-table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+    color: #333;
+    position: sticky;
+    top: 0;
+}
+
+#assignments-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+#assignments-table a {
+    color: #e74c3c;
+    text-decoration: none;
+}
+
+#assignments-table a:hover {
+    text-decoration: underline;
+}
+
+.instructions-cell {
+    max-width: 300px;
+}
+
+.instructions-cell details {
+    cursor: pointer;
+}
+
+.instructions-cell summary {
+    color: #666;
+}
+
+.full-instructions {
+    margin-top: 10px;
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+/* Rubric Styling */
+.rubric-list {
+    margin: 0;
+    padding-left: 20px;
+    font-size: 13px;
+}
+
+.rubric-list li {
+    margin-bottom: 8px;
+}
+
+.rubric-list small {
+    color: #888;
+}
+
+/* Loading and Error States */
+#loading {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-size: 18px;
+}
+
+#error {
+    background-color: #fee;
+    color: #c00;
+    padding: 15px;
+    border-radius: 4px;
+    margin: 20px 0;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+}
+
+footer a {
+    color: #888;
+    font-size: 12px;
+    text-decoration: none;
+    display: block;
+    margin: 5px 0;
+}
+
+footer a:hover {
+    color: #e74c3c;
 }
